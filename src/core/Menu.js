@@ -3,9 +3,10 @@ import { Link, withRouter } from "react-router-dom";
 
 const currentTab = (history, path) => {
   if (history.location.pathname === path) {
-    return { color: "#FFFFFF" };
+    console.log(history.location.pathname + ", " + path);
+    return { color: "#2ecc72" };
   } else {
-    return { color: "#D1D1D1" };
+    return { color: "#FFFFFF" };
   }
 };
 
@@ -17,33 +18,57 @@ const Menu = ({ history }) => (
           Home
         </Link>
       </li>
-      <li style={currentTab(history, "/cart")} className="nav-item">
-        <Link className="nav-link" to="/cart">
+      <li className="nav-item">
+        <Link
+          style={currentTab(history, "/cart")}
+          className="nav-link"
+          to="/cart"
+        >
           Cart
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <Link
+          style={currentTab(history, "/user/UserDashboard")}
+          className="nav-link"
+          to="/user/dashboard"
+        >
           Dashboard
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <Link
+          style={currentTab(history, "/admin/dashboard")}
+          className="nav-link"
+          to="/admin/dashboard"
+        >
           A. Dashboard
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <Link
+          style={currentTab(history, "/signup")}
+          className="nav-link"
+          to="/signup"
+        >
           Sign up
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <Link
+          style={currentTab(history, "/signin")}
+          className="nav-link"
+          to="/signin"
+        >
           Signin
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" to="/">
+        <Link
+          style={currentTab(history, "/signout")}
+          className="nav-link"
+          to="/signout"
+        >
           Singnout
         </Link>
       </li>

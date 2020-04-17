@@ -3,10 +3,10 @@ import "../styles.css";
 import { API } from "../backend";
 import Base from "./Base";
 
-export default function Home() {
+const Home = () => {
   console.log("API IS ", API);
   return (
-    <Base title="Home page">
+    <Base title="Home page" description="Welcome to the T-shirt store">
       <div className="row ">
         <div className="col-4">
           <button className="btn btn-success ">TEST</button>
@@ -20,4 +20,6 @@ export default function Home() {
       </div>
     </Base>
   );
-}
+};
+
+export default Home;
