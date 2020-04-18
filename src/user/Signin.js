@@ -2,7 +2,7 @@ import React, { userState } from "react";
 import Base from "../core/Base";
 import { Link } from "react-router-dom";
 
-const signIn = () => {
+const SignIn = () => {
   const singInForm = () => {
     return (
       <div className="row">
@@ -29,4 +29,4 @@ const signIn = () => {
   );
 };
 
-export default signIn;
+export default SignIn;
