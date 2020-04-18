@@ -86,9 +86,10 @@ const SignUp = () => {
         <div className="col-md-6 offset-sm-3 text-left">
           <div
             className="alert alert-danger"
-            style={{ display: error ? "" : "none" }}
+            style={{ display: success ? "" : "none" }}
           >
-            {error}
+            New account was created successfully. Please{" "}
+            <Link to="/signin">Login here</Link>
           </div>
         </div>
       </div>
@@ -101,10 +102,9 @@ const SignUp = () => {
         <div className="col-md-6 offset-sm-3 text-left">
           <div
             className="alert alert-success"
-            style={{ display: success ? "" : "none" }}
+            style={{ display: error ? "" : "none" }}
           >
-            New account was created successfully. Please{" "}
-            <Link to="/signin">Login here</Link>
+            {error}
           </div>
         </div>
       </div>

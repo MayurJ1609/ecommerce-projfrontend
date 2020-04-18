@@ -20,33 +20,6 @@ const SignIn = () => {
     setValues({ ...values, error: false, [name]: event.target.value });
   };
 
-  const onSubmit = (event) => {
-    event.preventDefault();
-    setvalues({
-      ...values,
-      error: false,
-      loading: true,
-    });
-    signin({ email, password })
-      .then((data) => {
-        if (data.error) {
-          setvalues({
-            ...values,
-            error: data.error,
-            loading: false,
-          });
-        } else {
-          authenticate(data, () => {
-            setValues({
-              ...values,
-              didRedirect: true,
-            });
-          });
-        }
-      })
-      .catch(console.log("Signin in request failed"));
-  };
-
   const singInForm = () => {
     return (
       <div className="row">
@@ -79,18 +52,53 @@ const SignIn = () => {
     );
   };
 
-  const successMessage = () => {
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setvalues({
+      ...values,
+      error: false,
+      loading: true,
+    });
+    signin({ email, password })
+      .then((data) => {
+        if (data.error) {
+          setvalues({
+            ...values,
+            error: data.error,
+            loading: false,
+          });
+        } else {
+          authenticate(data, () => {
+            setValues({
+              ...values,
+              didRedirect: true,
+            });
+          });
+        }
+      })
+      .catch(console.log("Signin in request failed"));
+  };
+
+  const performRedirect = () => {
+    if (didRedirect) {
+      if (user && user.role === 1) {
+        return <p>Redirect to Admin</p>;
+      } else {
+        return <p>Redirect to user dashboard</p>;
+      }
+    }
+    if (isAuthenticated) {
+      return <Redirect to="/" />;
+    }
+  };
+
+  const loadingMessage = () => {
     return (
-      <div className="row">
-        <div className="col-md-6 offset-sm-3 text-left">
-          <div
-            className="alert alert-danger"
-            style={{ display: error ? "" : "none" }}
-          >
-            {error}
-          </div>
+      loading && (
+        <div className="alert alert-info">
+          <h2>Loading....</h2>
         </div>
-      </div>
+      )
     );
   };
 
@@ -100,10 +108,9 @@ const SignIn = () => {
         <div className="col-md-6 offset-sm-3 text-left">
           <div
             className="alert alert-success"
-            style={{ display: success ? "" : "none" }}
+            style={{ display: error ? "" : "none" }}
           >
-            New account was created successfully. Please{" "}
-            <Link to="/signin">Login here</Link>
+            {error}
           </div>
         </div>
       </div>
@@ -112,7 +119,11 @@ const SignIn = () => {
 
   return (
     <Base title="Signin Page" description="A page for user to sign in!">
+      {loadingMessage()}
+      {errorMessage()}
       {singInForm()}
+      {performRedirect()}
+      <p className="text-white text-center">{JSON.stringify(values)}</p>
     </Base>
   );
 };
