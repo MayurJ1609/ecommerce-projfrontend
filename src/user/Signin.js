@@ -1,8 +1,52 @@
-import React, { userState } from "react";
+import React, { useState } from "react";
 import Base from "../core/Base";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { signin, authenticate, isAuthenticated } from "../auth/helper";
 
 const SignIn = () => {
+  const [values, setvalues] = useState({
+    email: "",
+    password: "",
+    error: "",
+    loading: false,
+    didRedirect: false,
+  });
+
+  const { email, password, error, loading, didRedirect } = values;
+
+  const { user } = isAuthenticated();
+
+  const handleChange = (name) => (event) => {
+    setValues({ ...values, error: false, [name]: event.target.value });
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    setvalues({
+      ...values,
+      error: false,
+      loading: true,
+    });
+    signin({ email, password })
+      .then((data) => {
+        if (data.error) {
+          setvalues({
+            ...values,
+            error: data.error,
+            loading: false,
+          });
+        } else {
+          authenticate(data, () => {
+            setValues({
+              ...values,
+              didRedirect: true,
+            });
+          });
+        }
+      })
+      .catch(console.log("Signin in request failed"));
+  };
+
   const singInForm = () => {
     return (
       <div className="row">
@@ -10,18 +54,62 @@ const SignIn = () => {
           <form>
             <div className="form-group">
               <label className="text-light">Email</label>
-              <input type="email" className="form-control" />
+              <input
+                onChange={handleChange("email")}
+                value={email}
+                type="email"
+                className="form-control"
+              />
             </div>
             <div className="form-group">
               <label className="text-light">Password</label>
-              <input type="password" className="form-control" />
+              <input
+                onChange={handleChange("password")}
+                value={password}
+                type="password"
+                className="form-control"
+              />
             </div>
-            <button className="btn-success btn-block">Submit</button>
+            <button onClick={onSubmit} className="btn-success btn-block">
+              Submit
+            </button>
           </form>
         </div>
       </div>
     );
   };
+
+  const successMessage = () => {
+    return (
+      <div className="row">
+        <div className="col-md-6 offset-sm-3 text-left">
+          <div
+            className="alert alert-danger"
+            style={{ display: error ? "" : "none" }}
+          >
+            {error}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const errorMessage = () => {
+    return (
+      <div className="row">
+        <div className="col-md-6 offset-sm-3 text-left">
+          <div
+            className="alert alert-success"
+            style={{ display: success ? "" : "none" }}
+          >
+            New account was created successfully. Please{" "}
+            <Link to="/signin">Login here</Link>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <Base title="Signin Page" description="A page for user to sign in!">
       {singInForm()}
