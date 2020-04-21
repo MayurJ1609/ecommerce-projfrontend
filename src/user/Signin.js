@@ -6,8 +6,8 @@ import { signin, authenticate, isAutheticated } from "../auth/helper";
 
 const Signin = () => {
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: "a@mayur.com",
+    password: "12345",
     error: "",
     loading: false,
     didRedirect: false,
@@ -36,7 +36,9 @@ const Signin = () => {
           });
         }
       })
-      .catch(console.log("signin request failed"));
+      .catch((err) => {
+        console.log("signin request failed" + err);
+      });
   };
 
   const performRedirect = () => {
