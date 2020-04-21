@@ -10,7 +10,7 @@ const currentTab = (history, path) => {
     return { color: "#FFFFFF" };
   }
 };
-
+//Understand the code here for admin and user route
 const Menu = ({ history }) => (
   <div>
     <ul className="nav nav-tabs bg-dark">
