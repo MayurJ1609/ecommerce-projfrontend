@@ -20,11 +20,11 @@ const Routes = () => {
           exact
           component={UserDashboard}
         ></PrivateRoute>
-        <PrivateRoute
+        <AdminRoute
           path="/admin/dashboard"
           exact
           component={AdminDashboard}
-        ></PrivateRoute>
+        ></AdminRoute>
       </Switch>
     </BrowserRouter>
   );
