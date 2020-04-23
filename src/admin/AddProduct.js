@@ -1,16 +1,55 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Base from "../core/Base";
 import { Link } from "react-router-dom";
+import { getCategories } from "./helper/adminapicall";
+import { isAutheticated } from "../auth/helper";
+
 const AddProduct = () => {
+  const { user, token } = isAutheticated;
   const [values, setvalues] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
+    photo: "",
+    categories: [],
+    category: "",
+    loading: false,
+    error: "",
+    createdProduct: "",
+    getRedirect: false,
+    formData: "",
   });
 
-  const { name, description, price, stock } = values;
+  const {
+    name,
+    description,
+    price,
+    stock,
+    categories,
+    category,
+    loading,
+    error,
+    createdProduct,
+    getRedirect,
+    formData,
+  } = values;
 
+  const preload = () => {
+    getCategories().then((data) => {
+      console.log("Data: " + data + " | Data error : " + data.error);
+      if (data.error) {
+        setvalues({ ...values, error: data.error });
+      } else {
+        setvalues({ ...values, categories: data, formData: new FormData() });
+        console.log("Category : " + categories);
+      }
+    });
+  };
+
+  useEffect(() => {
+    preload();
+  }, []);
   const onSubmit = () => {
     //
   };

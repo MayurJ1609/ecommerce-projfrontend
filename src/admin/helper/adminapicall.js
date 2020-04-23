@@ -21,7 +21,7 @@ export const createCategory = (userId, token, category) => {
 
 //Get all categories
 export const getCategories = () => {
-  return fetch(`${API}/categories`, {
+  return fetch(`${API}/category/categories`, {
     method: "GET",
   })
     .then((response) => {

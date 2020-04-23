@@ -53,14 +53,11 @@ export const signout = (next) => {
 
 export const isAutheticated = () => {
   if (typeof window === undefined) {
-    console.log("Is Authenticated = false 1 " + typeof window);
     return false;
   }
   if (localStorage.getItem("jwt")) {
-    console.log("Is Authenticated = true " + window.closed);
     return JSON.parse(localStorage.getItem("jwt"));
   } else {
-    console.log("Is Authenticated = false");
     return false;
   }
 };
