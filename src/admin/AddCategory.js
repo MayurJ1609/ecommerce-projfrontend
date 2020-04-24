@@ -43,7 +43,7 @@ const AddCategory = () => {
     });
   };
 
-  const succssMessage = () => {
+  const successMessage = () => {
     if (success) {
       return <h4 className="text-success">Category created successfully</h4>;
     }
@@ -83,7 +83,7 @@ const AddCategory = () => {
     >
       <div className="row bg-white rounded">
         <div className="col-md offset-md-2">
-          {succssMessage()}
+          {successMessage()}
           {warningMessage()}
           {myCategoryForm()}
           {goBack()}
