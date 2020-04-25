@@ -43,7 +43,7 @@ const ManageCategories = () => {
                 <div className="col-4">
                   <Link
                     className="btn btn-success"
-                    to={`/admin/product/update/${category._id}`}
+                    to={`/admin/category/update/${category._id}`}
                   >
                     <span className="">Update</span>
                   </Link>
