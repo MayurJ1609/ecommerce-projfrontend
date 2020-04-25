@@ -83,7 +83,6 @@ const UpdateProduct = ({ match }) => {
     preload(match.params.productId);
   }, []);
 
-  //TODO:Work on this
   const onSubmit = (event) => {
     event.preventDefault();
     setvalues({ ...values, error: "", loading: true });

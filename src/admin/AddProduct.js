@@ -7,8 +7,6 @@ import { isAutheticated } from "../auth/helper";
 const AddProduct = () => {
   const { user, token } = isAutheticated();
 
-  console.log("User : " + user._id + " | token : " + token);
-
   const [values, setvalues] = useState({
     name: "",
     description: "",
