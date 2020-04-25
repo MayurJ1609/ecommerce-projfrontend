@@ -31,9 +31,10 @@ const UpdateCategory = ({ match }) => {
     event.preventDefault();
     setError(false);
     setSuccess(false);
-
+    console.log("Before update category : " + { name });
     updateCategory(match.params.categoryId, user._id, token, { name }).then(
       (data) => {
+        console.log("Response received from Backend");
         if (data.error) {
           setError(true);
         } else {

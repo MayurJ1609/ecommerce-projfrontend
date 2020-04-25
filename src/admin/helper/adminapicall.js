@@ -40,8 +40,10 @@ export const getCategory = (categoryId) => {
     })
     .catch((err) => console.log(err));
 };
+
 //TODO:Write a function to update category
 export const updateCategory = (categoryId, userId, token, category) => {
+  console.log("CategoryData : " + JSON.stringify(category));
   return fetch(`${API}/category/${categoryId}/${userId}`, {
     method: "PUT",
     headers: {
