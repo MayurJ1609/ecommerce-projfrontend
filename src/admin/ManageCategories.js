@@ -11,8 +11,9 @@ const ManageCategories = () => {
 
   const preload = () => {
     getCategories().then((data) => {
+      console.log("data : " + data);
       if (data.error) {
-        console.log(data.err);
+        console.log(data.error);
       } else {
         setcategories(data);
       }
@@ -34,7 +35,7 @@ const ManageCategories = () => {
           <h2 className="text-center text-white my-3">Total 3 products</h2>
           {categories.map((category, index) => {
             return (
-              <div className="row text-center mb-2 ">
+              <div key={index} className="row text-center mb-2 ">
                 <div className="col-4">
                   <h3 className="text-white" key={index}>
                     {category.name}
