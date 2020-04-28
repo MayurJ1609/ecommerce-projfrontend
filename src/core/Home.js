@@ -14,7 +14,6 @@ const Home = () => {
       if (data.error) {
         setError(data.error);
       } else {
-        console.log("product data : " + JSON.stringify(data));
         setProducts(data);
       }
     });
