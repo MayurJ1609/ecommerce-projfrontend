@@ -31,10 +31,12 @@ const UpdateCategory = ({ match }) => {
     event.preventDefault();
     setError(false);
     setSuccess(false);
-    console.log("Before update category : " + { name });
-    updateCategory(match.params.categoryId, user._id, token, { name }).then(
+    console.log("Before update category : " + JSON.stringify(name));
+    updateCategory(match.params.categoryId, user._id, token, name).then(
       (data) => {
-        console.log("Response received from Backend");
+        console.log(
+          "Response received from Backend | data : " + JSON.stringify(data)
+        );
         if (data.error) {
           setError(true);
         } else {
@@ -48,7 +50,7 @@ const UpdateCategory = ({ match }) => {
 
   const handleChange = (name) => (event) => {
     setError("");
-    setName(event.target.value);
+    setName({ [name]: event.target.value });
   };
 
   const successMessage = () => {
@@ -70,8 +72,8 @@ const UpdateCategory = ({ match }) => {
         <input
           type="text"
           className="form-control my-3"
-          onChange={handleChange}
-          value={name}
+          onChange={handleChange("name")}
+          defaultValue={name}
           autoFocus
           required
           placeholder="Ex. Summer"

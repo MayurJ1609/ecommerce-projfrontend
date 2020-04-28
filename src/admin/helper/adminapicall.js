@@ -41,12 +41,12 @@ export const getCategory = (categoryId) => {
     .catch((err) => console.log(err));
 };
 
-//TODO:Write a function to update category
 export const updateCategory = (categoryId, userId, token, category) => {
-  console.log("CategoryData : " + JSON.stringify(category));
+  console.log("Request data : " + JSON.stringify(category));
   return fetch(`${API}/category/${categoryId}/${userId}`, {
     method: "PUT",
     headers: {
+      "Content-Type": "application/json",
       Accept: "application/json",
       Authorization: `Bearer ${token}`,
     },
@@ -129,6 +129,7 @@ export const updateProduct = (productId, userId, token, product) => {
     body: product,
   })
     .then((response) => {
+      console.log("Response from BE " + response.json());
       return response.json();
     })
     .catch((err) => {
