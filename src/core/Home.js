@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles.css";
 import { API } from "../backend";
 import Base from "./Base";
-import Card from "./card";
+import Card from "./Card";
 import { getProducts } from "./helper/coreapicalls";
 
 const Home = () => {
