@@ -1,65 +1,102 @@
-import React, { useState, useEffect } from "react";
-import { loadCart, cartEmpty } from "./helper/cartHelper";
-import { Link } from "react-router-dom";
-import { getmeToken, processPayment } from "./helper/paymentBHelper";
-import { createOrder } from "./helper/orderHelper";
-import { isAutheticated } from "../auth/helper";
-import DropIn from "braintree-web-drop-in-react";
+import React, { useState, useEffect } from 'react';
+import { loadCart, cartEmpty } from './helper/cartHelper';
+import { Link } from 'react-router-dom';
+import { getmeToken, processPayment } from './helper/paymentBHelper';
+import { createOrder } from './helper/orderHelper';
+import { isAutheticated } from '../auth/helper';
+import DropIn from 'braintree-web-drop-in-react';
 
 const PaymentB = ({ products, setReload = (f) => f, reload = undefined }) => {
-  const [info, setInfo] = useState({
-    loading: false,
-    success: false,
-    clientToken: null,
-    error: "",
-    instance: {},
-  });
+	const [info, setInfo] = useState({
+		loading: false,
+		success: false,
+		clientToken: null,
+		error: '',
+		instance: {},
+	});
 
-  const userId = isAutheticated() && isAutheticated().user._id;
-  const token = isAutheticated() && isAutheticated().token;
+	const userId = isAutheticated() && isAutheticated().user._id;
+	const token = isAutheticated() && isAutheticated().token;
 
-  const getToken = (userId, token) => {
-    console.log("User Id : " + userId + " | token : " + token);
+	const getToken = (userId, token) => {
+		console.log('User Id : ' + userId + ' | token : ' + token);
 
-    getmeToken(userId, token).then((info) => {
-      console.log("Information : " + JSON.stringify(info));
-      if (info.error) {
-        setInfo({ ...info, error: info.error });
-      } else {
-        const clientToken = info.clientToken;
-        setInfo({ clientToken });
-      }
-    });
-  };
+		getmeToken(userId, token).then((info) => {
+			console.log('Information : ' + JSON.stringify(info));
+			if (info.error) {
+				setInfo({ ...info, error: info.error });
+			} else {
+				const clientToken = info.clientToken;
+				setInfo({ clientToken });
+			}
+		});
+	};
 
-  const showbtdropIn = () => {
-    return (
-      <div>
-        {info.clientToken !== null && products.length > 0 ? (
-          <div>
-            <DropIn
-              options={{ authorization: info.clientToken }}
-              onInstance={(instance) => (info.instance = instance)}
-            />
-            <button onClick={() => {}}>Buy</button>
-          </div>
-        ) : (
-          <h3>Please login or add something to cart</h3>
-        )}
-      </div>
-    );
-  };
+	const showbtdropIn = () => {
+		return (
+			<div>
+				{info.clientToken !== null && products.length > 0 ? (
+					<div>
+						<DropIn
+							options={{ authorization: info.clientToken }}
+							onInstance={(instance) => (info.instance = instance)}
+						/>
+						<button
+							className="btn btn-outline-success btn-block"
+							onClick={onPurchase}
+						>
+							Buy
+						</button>
+					</div>
+				) : (
+					<h3>Please login or add something to cart</h3>
+				)}
+			</div>
+		);
+	};
 
-  useEffect(() => {
-    getToken(userId, token);
-  }, []);
+	useEffect(() => {
+		getToken(userId, token);
+	}, []);
 
-  return (
-    <div>
-      <h3>Test Braintree</h3>
-      {showbtdropIn()}
-    </div>
-  );
+	const onPurchase = () => {
+		setInfo({ loading: true });
+		let nonce;
+		let getNonce = info.instance.requestPaymentMethod().then((data) => {
+			nonce = data.nonce;
+			const paymentData = {
+				paymentMethodNonce: nonce,
+				amount: getAmount(),
+			};
+			processPayment(userId, token, paymentData)
+				.then((response) => {
+					console.log('Payment Success');
+					setInfo({ ...info, success: response.success, loading: false });
+					//TODO: Empty the cart
+					//TODO: force reload
+				})
+				.catch((error) => {
+					setInfo({ loading: false, success: false });
+					console.log('Payment failed');
+				});
+		});
+	};
+
+	const getAmount = () => {
+		let amount = 0;
+		products.map((product, i) => {
+			amount = amount + product.price;
+		});
+
+		return amount;
+	};
+
+	return (
+		<div>
+			<h3>Your bill is {getAmount()} $</h3>
+			{showbtdropIn()}
+		</div>
+	);
 };
 
 export default PaymentB;
