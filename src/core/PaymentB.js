@@ -22,7 +22,7 @@ const PaymentB = ({ products, setReload = (f) => f, reload = undefined }) => {
     console.log("User Id : " + userId + " | token : " + token);
 
     getmeToken(userId, token).then((info) => {
-      console.log("Information : " + info);
+      console.log("Information : " + JSON.stringify(info));
       if (info.error) {
         setInfo({ ...info, error: info.error });
       } else {
