@@ -22,7 +22,6 @@ const PaymentB = ({ products, setReload = (f) => f, reload = undefined }) => {
 		console.log('User Id : ' + userId + ' | token : ' + token);
 
 		getmeToken(userId, token).then((info) => {
-			console.log('Information : ' + JSON.stringify(info));
 			if (info.error) {
 				setInfo({ ...info, error: info.error });
 			} else {
@@ -68,16 +67,27 @@ const PaymentB = ({ products, setReload = (f) => f, reload = undefined }) => {
 				paymentMethodNonce: nonce,
 				amount: getAmount(),
 			};
+			console.log('Before process payment');
 			processPayment(userId, token, paymentData)
 				.then((response) => {
 					console.log('Payment Success');
 					setInfo({ ...info, success: response.success, loading: false });
-					//TODO: Empty the cart
-					//TODO: force reload
+
+					const orderData = {
+						products: products,
+						transation_id: response.transaction.id,
+						amount: response.transaction.amount,
+					};
+					console.log('Creating order');
+					createOrder(userId, token, orderData);
+					cartEmpty(() => {
+						console.log('Did we got a crash');
+					});
+					setReload(!reload);
 				})
 				.catch((error) => {
 					setInfo({ loading: false, success: false });
-					console.log('Payment failed');
+					console.log('Payment failed error : ' + error);
 				});
 		});
 	};
